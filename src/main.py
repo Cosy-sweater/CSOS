@@ -6,10 +6,14 @@ from commands import commands
 
 class ConsoleHandler:
     def __init__(self, vfs_path: str = None, starting_script: str = None) -> None:
-        self.file_system = FileSystem(vfs_path)
-        self.interpreter = Interpreter(self)
-
-        self.is_running = True
+        try:
+            self.file_system = FileSystem(vfs_path)
+            self.is_running = True
+            self.interpreter = Interpreter(self)
+        except Exception as e:
+            print(e)
+            self.is_running = False
+            return
 
     def output(self, *arg: str, sep: str = " ") -> None:
         print(*arg, sep=sep)
@@ -141,8 +145,7 @@ class FileSystem:
             self.name = "Default Tree"
             self.tree = self.default_tree
         else:
-            self.name = "Default Tree"
-            self.tree = self.default_tree
+            self.name, self.tree = vfs_handler.load_vfs(path)
 
 
 if __name__ == "__main__":
@@ -153,9 +156,14 @@ if __name__ == "__main__":
     else:
         app = ConsoleHandler()
 
+
     if len(args) > 1:
-        with open(args[1], "r") as f:
-            test_script = [i.strip() for i in f.readlines()]
+        try:
+            with open(args[1], "r") as f:
+                test_script = [i.strip() for i in f.readlines()]
+        except FileNotFoundError as e:
+            print(e)
+            exit(1)
 
         app.run(test_script)
     else:

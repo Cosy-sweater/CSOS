@@ -1,0 +1,19 @@
+<data>
+    <vfs-name>Test</vfs-name>
+    <file-tree>
+        <Dir name="users">
+            <Dir name="admin">
+                <File name="test.txt"/>
+                <File name="test2.txt"/>
+            </Dir>
+            <Dir name="user1">
+                <File name="test_user.txt"/>
+            </Dir>
+        </Dir>
+        <Dir name="bin"/>
+    </file-tree>
+
+    <file-contents path="users/admin/test.txt">Lorem ipsum</file-contents>
+    <file-contents path="users/admin/test2.txt">Test text</file-contents>
+    <file-contents path="users/user1/test_user.txt">User text</file-contents>
+</data>

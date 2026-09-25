@@ -1,5 +1,6 @@
 import typing
 
+
 class Dir:
     def __init__(self, name: str, children: typing.Iterable = ()):
         self.name = name
@@ -14,5 +15,6 @@ class Dir:
 
 
 class File:
-    def __init__(self, name: str):
+    def __init__(self, name: str, contents: bytes = b""):
         self.name = name
+        self.contents: bytes = contents
