@@ -42,39 +42,57 @@ class Interpreter:
         self.console: ConsoleHandler = console
 
     def handle_command(self, raw: str) -> str:
-        args = self._split_args(raw)
-        if cmd := commands.get(args[0]):
-            cmd(self.console, args[1:])
+        tokens = self._parse_input(raw)
+        if cmd := commands.get(tokens["command"]):
+            cmd(self.console, tokens)
         else:
-            self.console.output("Unknown command")
+            self.console.output("Unknown command: " + tokens["command"])
 
         return "None"
 
-    def _split_args(self, raw: str):
-        res = []
+    def _parse_input(self, raw: str):
+        tokens = []
         current = []
-        in_arg = False
         in_quotes = False
 
-        for item in raw:
-            if item == '"':
+        # Tokenize while respecting quoted strings.
+        for char in raw:
+            if char == '"':
                 in_quotes = not in_quotes
-                in_arg = True
+                continue
 
-            elif item == " " and not in_quotes:
-                if in_arg:
-                    res.append("".join(current))
+            if char == " " and not in_quotes:
+                if current:
+                    tokens.append("".join(current))
                     current = []
-                    in_arg = False
-
             else:
-                current.append(item)
-                in_arg = True
+                current.append(char)
 
-        if in_arg:
-            res.append("".join(current))
+        if current:
+            tokens.append("".join(current))
 
-        return res
+        if not tokens:
+            return {}
+
+        result = {
+            "command": tokens[0],
+            "args": [],
+        }
+
+        for token in tokens[1:]:
+            if token.startswith("-"):
+                if "=" in token:
+                    key, value = token.split("=", 1)
+                    result[key] = value
+                else:
+                    result[token] = None
+            else:
+                result["args"].append(token)
+
+        if not result["args"]:
+            del result["args"]
+
+        return result
 
 
 class FileSystem:
@@ -99,23 +117,6 @@ class FileSystem:
         self.current_dir = self.tree
         self.current_path = "/"
 
-    def get_tree(self, start_dir: Dir = None):
-        def scan_dir(dir: Dir, depth=-1):
-            res = ["---" * depth + " " + dir.name + "/"]
-            for i in dir.children:
-                if type(i) is File:
-                    res.append("---" * (depth + 1) + " " + i.name)
-                else:
-                    res += scan_dir(i, depth + 1)
-            # else:
-            #     res.append("-" * (depth + 1) * 2)
-            return res
-
-        if start_dir is None:
-            start_dir = self.tree
-
-        return scan_dir(start_dir)
-
     def goto(self, path: str) -> str | None:
         old_dir = self.current_dir
         old_path = self.current_path
@@ -138,6 +139,24 @@ class FileSystem:
                 self.current_path = old_path
                 return f"Directory not found: {dir}"
 
+    def get_dir(self, path: str) -> Dir | None:
+        search_dir = None
+        if path.startswith("/"):
+            search_dir = self.tree
+            path = path[1:]
+
+            if len(path) == 0:
+                return search_dir
+
+        path = path.split("/")
+        for dir in path:
+            if new_dir := self.current_dir.get_child(dir):
+                search_dir = new_dir
+            else:
+                return None
+
+        return search_dir
+
     def load_vfs(self, path: str) -> None:
         import vfs_handler
 
@@ -155,7 +174,6 @@ if __name__ == "__main__":
         app = ConsoleHandler(vfs_path)
     else:
         app = ConsoleHandler()
-
 
     if len(args) > 1:
         try:

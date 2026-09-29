@@ -33,7 +33,7 @@ def load_vfs(path: str) -> Dir:
         raise Exception("VFS reading error: unnamed vfs")
 
     # building tree
-    root_dir = Dir("/", [parse_element(child) for child in file_tree])
+    root_dir = Dir("~", [parse_element(child) for child in file_tree])
 
     # reading file contents
     for contents in root.findall("file-contents"):
