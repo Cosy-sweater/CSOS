@@ -7,6 +7,7 @@ if __name__ == "__main__":
 
 
 def _ls(c: "ConsoleHandler", tokens: dict[str, str]):
+    """Функция вывода директорий и файлов"""
     err = False
     for i in tokens:
         if i not in ["-R", "-p", "args", "command"]:
@@ -44,6 +45,7 @@ def _ls(c: "ConsoleHandler", tokens: dict[str, str]):
 
 
 def _cd(c: "ConsoleHandler", tokens):
+    """Функция для изменения рабочей директории"""
     if tokens["args"]:
         t = c.file_system.goto(tokens["args"][0])
         if t:
@@ -53,6 +55,7 @@ def _cd(c: "ConsoleHandler", tokens):
 
 
 def _exit(c: "ConsoleHandler", args: list[str]):
+    """Функция завершения работы"""
     if len(args) > 1:
         c.output("This command does not take any arguments")
     c.is_running = False

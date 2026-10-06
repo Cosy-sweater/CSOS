@@ -5,7 +5,8 @@ from commands import commands
 
 
 class ConsoleHandler:
-    def __init__(self, vfs_path: str = None, starting_script: str = None) -> None:
+    """Основной класс, используемый для запуска и исполнения программы"""
+    def __init__(self, vfs_path: str | None = None, starting_script: str | None = None) -> None:
         try:
             self.file_system = FileSystem(vfs_path)
             self.is_running = True
@@ -15,13 +16,17 @@ class ConsoleHandler:
             self.is_running = False
             return
 
+    @staticmethod
     def output(self, *arg: str, sep: str = " ") -> None:
+        """Метод вывода в консоль для использования программой"""
         print(*arg, sep=sep)
 
     def _get_prefix(self) -> str:
+        """Метод, возвращающий префикс перед приглашением к вводу"""
         return f'{self.file_system.name}:[{self.file_system.current_path}]#'
 
-    def read_input(self, force_input_text: str = None) -> None:
+    def read_input(self, force_input_text: str | None = None) -> None:
+        """Метод для первичной обработки ввода пользователя и автоматического ввода стартового скрипта"""
         print(self._get_prefix(), end="")
         if force_input_text is None:
             command = input()
@@ -31,6 +36,7 @@ class ConsoleHandler:
         self.interpreter.handle_command(command)
 
     def run(self, script: typing.Iterable[str] = ()) -> None:
+        """Метод запуска программы. Выполняет переданный в метод код автоматически"""
         script: list = list(script)
 
         while self.is_running:
@@ -38,10 +44,12 @@ class ConsoleHandler:
 
 
 class Interpreter:
+    """Класс для обработки и исполнения команд пользователя"""
     def __init__(self, console: ConsoleHandler) -> None:
         self.console: ConsoleHandler = console
 
     def handle_command(self, raw: str) -> str:
+        """Метод исполнения строки, содержащей команду"""
         tokens = self._parse_input(raw)
         if cmd := commands.get(tokens["command"]):
             cmd(self.console, tokens)
@@ -51,6 +59,7 @@ class Interpreter:
         return "None"
 
     def _parse_input(self, raw: str):
+        """Метод для парсинга строки с командой, разбивающий её на аргументы и их значения"""
         tokens = []
         current = []
         in_quotes = False
@@ -101,6 +110,7 @@ class Interpreter:
 
 
 class FileSystem:
+    """Класс, реализующий и хранящий виртуальную файловую систему, а также методы работы с ней"""
     default_tree = Dir("/", [
         Dir("users", [
             Dir("admin", [
@@ -123,6 +133,7 @@ class FileSystem:
         self.current_path = "/"
 
     def goto(self, path: str) -> str | None:
+        """Метод для изменения рабочей директории"""
         old_dir = self.current_dir
         old_path = self.current_path
 
@@ -145,6 +156,7 @@ class FileSystem:
                 return f"Directory not found: {dir}"
 
     def get_dir(self, path: str) -> Dir | None:
+        """Метод поиска файла или директории в файловой системе по переданному пути"""
         search_dir = None
         if path.startswith("/"):
             search_dir = self.tree
@@ -163,6 +175,7 @@ class FileSystem:
         return search_dir
 
     def load_vfs(self, path: str) -> None:
+        """Метод загрузки файловой системы"""
         import vfs_handler
 
         if path is None:

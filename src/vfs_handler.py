@@ -4,6 +4,7 @@ from vfs_components import *
 
 
 def load_vfs(path: str) -> Dir:
+    """Функция чтения, загрузки и обработки XML файла, содержащего виртуальную файловую систему"""
     def parse_element(element: ET.Element) -> Dir | File:
         if element.tag == "Dir":
             return Dir(
@@ -32,10 +33,8 @@ def load_vfs(path: str) -> Dir:
     if vfs_name is None:
         raise Exception("VFS reading error: unnamed vfs")
 
-    # building tree
     root_dir = Dir("~", [parse_element(child) for child in file_tree])
 
-    # reading file contents
     for contents in root.findall("file-contents"):
         path = contents.attrib["path"].split("/")
 
