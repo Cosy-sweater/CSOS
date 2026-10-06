@@ -1,0 +1,4 @@
+ls -Rp
+cd users/admin
+ls -R
+exit
