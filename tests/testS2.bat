@@ -1,0 +1,1 @@
+py ../src/main.py "test.xml" "../src/test-scriptS2.txt"

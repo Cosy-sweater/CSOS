@@ -1,3 +1,8 @@
 .venv
 .idea
 src/test.py
+cur-head.txt
+pyvenv.cfg
+Scripts
+Lib
+Include

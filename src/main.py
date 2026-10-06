@@ -135,14 +135,9 @@ class FileSystem:
                 return f"Directory not found: {dir}"
 
     def load_vfs(self, path: str) -> None:
-        import vfs_handler
-
-        if path is None:
-            self.name = "Default Tree"
-            self.tree = self.default_tree
-        else:
-            self.name = "Default Tree"
-            self.tree = self.default_tree
+        # import vfs_handler
+        self.name = "Default Tree"
+        self.tree = self.default_tree
 
 
 if __name__ == "__main__":
