@@ -14,10 +14,8 @@ def _ls(c: "ConsoleHandler", tokens: dict[str, str]):
     if err:
         return
 
-    if tokens.get("args"):
-        start_dir = c.file_system.get_dir(tokens["args"][0])
-    else:
-        start_dir = c.file_system.tree
+    start_dir = c.file_system.get_dir(tokens["args"][0]) \
+        if tokens.get("args") else c.file_system.tree
 
     if start_dir is None:
         c.output(f"Directory not found: {tokens['args'][0]}")
@@ -26,8 +24,8 @@ def _ls(c: "ConsoleHandler", tokens: dict[str, str]):
     slashes = "-p" in tokens.keys()
 
     def scan_dir(dir: Dir, depth=-1):
-        res = ["---" * depth + " " * (depth > 0) + dir.name +
-               ("/" if slashes else "")]
+        res = ["---" * depth + " " * (depth > 0) + dir.name + (
+            "/" if slashes else "")]
         for i in dir.children:
             if type(i) is File:
                 res.append("---" * (depth + 1) + " " * (depth > 0) + i.name)

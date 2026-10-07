@@ -17,7 +17,6 @@ class ConsoleHandler:
             self.is_running = False
             return
 
-    @staticmethod
     def output(self, *arg: str, sep: str = " ") -> None:
         """Метод вывода в консоль для использования программой"""
         print(*arg, sep=sep)
@@ -61,20 +60,16 @@ class Interpreter:
 
         return "None"
 
-    def _parse_input(self, raw: str):
-        """Метод для парсинга строки с командой, разбивающий её
-          на аргументы и их значения"""
+    def _tokenize_input(self, raw: str) -> list[str]:
+        """Метод токенизации команды"""
         tokens = []
         current = []
         in_quotes = False
 
-        # Tokenize while respecting quoted strings.
         for char in raw:
             if char == '"':
                 in_quotes = not in_quotes
-                continue
-
-            if char == " " and not in_quotes:
+            elif char == " " and not in_quotes:
                 if current:
                     tokens.append("".join(current))
                     current = []
@@ -83,6 +78,25 @@ class Interpreter:
 
         if current:
             tokens.append("".join(current))
+
+        return tokens
+
+    def _parse_flag(self, token: str, result: dict) -> None:
+        """Метод обработки аргументов команды"""
+        if "=" in token:
+            key, value = token.split("=", 1)
+            result[key] = value
+        elif token.startswith("--"):
+            result[token] = None
+        elif len(token) > 2:
+            for flag in token[1:]:
+                result[f"-{flag}"] = None
+        else:
+            result[token] = None
+
+    def _parse_input(self, raw: str):
+        """Метод парсинга введенной команды"""
+        tokens = self._tokenize_input(raw)
 
         if not tokens:
             return {}
@@ -94,16 +108,7 @@ class Interpreter:
 
         for token in tokens[1:]:
             if token.startswith("-"):
-                if "=" in token:
-                    key, value = token.split("=", 1)
-                    result[key] = value
-                elif token.startswith("--"):
-                    result[token] = None
-                elif len(token) > 2:
-                    for flag in token[1:]:
-                        result[f"-{flag}"] = None
-                else:
-                    result[token] = None
+                self._parse_flag(token, result)
             else:
                 result["args"].append(token)
 
