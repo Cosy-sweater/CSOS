@@ -1,6 +1,7 @@
 .venv
 .idea
 src/test.py
+src/__pycache__
 cur-head.txt
 pyvenv.cfg
 Scripts
