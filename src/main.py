@@ -1,12 +1,13 @@
 import sys
+import typing
 
-from vfs_components import *
+from vfs_components import Dir, File
 from commands import commands
 
 
 class ConsoleHandler:
     """Основной класс, используемый для запуска и исполнения программы"""
-    def __init__(self, vfs_path: str | None = None, starting_script: str | None = None) -> None:
+    def __init__(self, vfs_path: str | None = None) -> None:
         try:
             self.file_system = FileSystem(vfs_path)
             self.is_running = True
@@ -26,7 +27,8 @@ class ConsoleHandler:
         return f'{self.file_system.name}:[{self.file_system.current_path}]#'
 
     def read_input(self, force_input_text: str | None = None) -> None:
-        """Метод для первичной обработки ввода пользователя и автоматического ввода стартового скрипта"""
+        """Метод для первичной обработки ввода пользователя и
+          автоматического ввода стартового скрипта"""
         print(self._get_prefix(), end="")
         if force_input_text is None:
             command = input()
@@ -36,7 +38,8 @@ class ConsoleHandler:
         self.interpreter.handle_command(command)
 
     def run(self, script: typing.Iterable[str] = ()) -> None:
-        """Метод запуска программы. Выполняет переданный в метод код автоматически"""
+        """Метод запуска программы. Выполняет переданный в
+          метод код автоматически"""
         script: list = list(script)
 
         while self.is_running:
@@ -59,7 +62,8 @@ class Interpreter:
         return "None"
 
     def _parse_input(self, raw: str):
-        """Метод для парсинга строки с командой, разбивающий её на аргументы и их значения"""
+        """Метод для парсинга строки с командой, разбивающий её
+          на аргументы и их значения"""
         tokens = []
         current = []
         in_quotes = False
@@ -110,7 +114,8 @@ class Interpreter:
 
 
 class FileSystem:
-    """Класс, реализующий и хранящий виртуальную файловую систему, а также методы работы с ней"""
+    """Класс, реализующий и хранящий виртуальную файловую систему,
+      а также методы работы с ней"""
     default_tree = Dir("/", [
         Dir("users", [
             Dir("admin", [
@@ -156,7 +161,8 @@ class FileSystem:
                 return f"Directory not found: {dir}"
 
     def get_dir(self, path: str) -> Dir | None:
-        """Метод поиска файла или директории в файловой системе по переданному пути"""
+        """Метод поиска файла или директории в файловой
+          системе по переданному пути"""
         search_dir = None
         if path.startswith("/"):
             search_dir = self.tree

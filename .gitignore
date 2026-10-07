@@ -6,3 +6,4 @@ pyvenv.cfg
 Scripts
 Lib
 Include
+requires.flake8

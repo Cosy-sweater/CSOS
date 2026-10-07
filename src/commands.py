@@ -1,6 +1,4 @@
-import typing
-
-from vfs_components import *
+from vfs_components import File, Dir
 
 if __name__ == "__main__":
     from main import ConsoleHandler
@@ -28,7 +26,8 @@ def _ls(c: "ConsoleHandler", tokens: dict[str, str]):
     slashes = "-p" in tokens.keys()
 
     def scan_dir(dir: Dir, depth=-1):
-        res = ["---" * depth + " " * (depth > 0) + dir.name + ("/" if slashes else "")]
+        res = ["---" * depth + " " * (depth > 0) + dir.name +
+               ("/" if slashes else "")]
         for i in dir.children:
             if type(i) is File:
                 res.append("---" * (depth + 1) + " " * (depth > 0) + i.name)

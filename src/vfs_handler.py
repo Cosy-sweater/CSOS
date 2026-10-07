@@ -1,10 +1,11 @@
 import xml.etree.ElementTree as ET
 
-from vfs_components import *
+from vfs_components import File, Dir
 
 
 def load_vfs(path: str) -> Dir:
-    """Функция чтения, загрузки и обработки XML файла, содержащего виртуальную файловую систему"""
+    """Функция чтения, загрузки и обработки XML файла,
+      содержащего виртуальную файловую систему"""
     def parse_element(element: ET.Element) -> Dir | File:
         if element.tag == "Dir":
             return Dir(
@@ -47,11 +48,13 @@ def load_vfs(path: str) -> Dir:
             current = current.get_child(path_part)
 
             if current is None or type(current) is not Dir:
-                raise Exception(f"VFS reading error: incorrect file-contents path {'/'.join(path)}")
+                raise Exception(f"VFS reading error: incorrect \
+                                file-contents path {'/'.join(path)}")
 
         file = current.get_child(path[-1])
         if file is None or type(file) is not File:
-            raise Exception(f"VFS reading error: file-contents file not found {'/'.join(path)}")
+            raise Exception(f"VFS reading error: file-contents file\
+                             not found {'/'.join(path)}")
 
         file.contents = contents.text or ""
 

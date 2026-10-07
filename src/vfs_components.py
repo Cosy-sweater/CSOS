@@ -2,7 +2,7 @@ import typing
 
 
 class Dir:
-    """Класс виртуальной файловой системы, симулирующий директорию"""
+    """Часть виртуальной файловой системы, симулирующий директорию"""
     def __init__(self, name: str, children: typing.Iterable = ()):
         self.name = name
         self.children: list[Dir | File] = list(children)
@@ -17,7 +17,7 @@ class Dir:
 
 
 class File:
-    """Класс виртуальной файловой системы, симулирующий файл и его содержимое"""
+    """Часть виртуальной файловой системы, симулирующая файл с содержимым"""
     def __init__(self, name: str, contents: bytes = b""):
         self.name = name
         self.contents: bytes = contents
