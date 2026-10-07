@@ -17,6 +17,7 @@ class Dir:
 
 
 class File:
-    """Часть виртуальной файловой системы, симулирующая файл"""
-    def __init__(self, name: str):
+    """Часть виртуальной файловой системы, симулирующая файл с содержимым"""
+    def __init__(self, name: str, contents: bytes = b""):
         self.name = name
+        self.contents: bytes = contents

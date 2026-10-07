@@ -1,0 +1,30 @@
+<data>
+    <vfs-name>TestVFSt</vfs-name>
+    <file-tree>
+        <Dir name="users">
+            <Dir name="admin">
+                <File name="test.txt"/>
+                <File name="test2.txt"/>
+                <Dir name="scripts">
+                    <File name="program1.py"/>
+                    <File name="program2.cs"/>
+                    <File name="program3.js"/>
+                </Dir>
+            </Dir>
+            <Dir name="user1">
+                <File name="test_user.txt"/>
+            </Dir>
+        </Dir>
+        <Dir name="bin">
+                <File name="none.none"/>
+        </Dir>
+    </file-tree>
+
+    <file-contents path="users/admin/test.txt">TG9yZW0gaXBzdW0=</file-contents>
+    <file-contents path="users/admin/test2.txt">VGVzdCB0ZXh0</file-contents>
+    <file-contents path="users/user1/test_user.txt">VXNlciB0ZXh0</file-contents>
+    <file-contents path="users/admin/scripts/program1.py">cHJpbnQoIkhlbGxvIHdvcmxkISIp</file-contents>
+    <file-contents path="users/admin/scripts/program2.cs">SSBkb24ndCBrbm93IEMj</file-contents>
+    <file-contents path="users/admin/scripts/program3.js">Y29uc29sZS5sb2coIkhlbGxvIEphdmEiKQ==</file-contents>
+    <file-contents path="bin/none.none">TnVsbCwgZW1wdHksIG5vbmU=</file-contents>
+</data>
