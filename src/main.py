@@ -46,7 +46,10 @@ class Interpreter:
         elif args[0] == "cd":
             self.console.output("cd")
         elif args[0] == "exit":
+            self.console.output("Stopping the program")
             self.console.is_running = False
+        else:
+            self.console.output(f"Unknown command: {args[0]}")
         return "None"
 
 
@@ -82,8 +85,6 @@ class FileSystem:
                     res.append("---" * (depth + 1) + " " + i.name)
                 else:
                     res += scan_dir(i, depth + 1)
-            # else:
-            #     res.append("-" * (depth + 1) * 2)
             return res
 
         if start_dir is None:
