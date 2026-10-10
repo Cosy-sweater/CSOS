@@ -83,12 +83,13 @@ class Interpreter:
 
     def _parse_flag(self, token: str, result: dict) -> None:
         """Метод обработки аргументов команды"""
+        token_count_num = 2
         if "=" in token:
             key, value = token.split("=", 1)
             result[key] = value
         elif token.startswith("--"):
             result[token] = None
-        elif len(token) > 2:
+        elif len(token) > token_count_num:
             for flag in token[1:]:
                 result[f"-{flag}"] = None
         else:

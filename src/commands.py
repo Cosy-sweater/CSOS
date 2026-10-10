@@ -36,7 +36,6 @@ def _ls(c: "ConsoleHandler", tokens: dict[str, str]):
     if "-R" in tokens.keys():
         c.output(*scan_dir(start_dir)[1:], sep="\n")
     else:
-        # c.output(start_dir.name + ("/" if slashes else ""))
         for i in start_dir.children:
             c.output(i.name + ("/" if type(i) is Dir and slashes else ""))
 
@@ -58,8 +57,20 @@ def _exit(c: "ConsoleHandler", args: list[str]):
     c.is_running = False
 
 
+def _actual_ls(c: "ConsoleHandler", args: list[str]):
+    """Функция ls из задания"""
+    c.output("ls")
+
+
+def _actual_cd(c: "ConsoleHandler", args: list[str]):
+    """Функция cd из задания"""
+    c.output("cd")
+
+
 commands = {
-    "ls": _ls,
-    "cd": _cd,
+    "dbgls": _ls,
+    "dbgcd": _cd,
+    "ls": _actual_ls,
+    "cd": _actual_cd,
     "exit": _exit,
 }
