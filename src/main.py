@@ -51,7 +51,7 @@ class Interpreter:
         if cmd := commands.get(args[0]):
             cmd(self.console, args[1:])
         else:
-            self.console.output("Unknown command")
+            self.console.output(f"Unknown command: {args[0]}")
 
         return "None"
 
